@@ -3,8 +3,26 @@ POST http://localhost:3002/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "a2dmin",
+  "username": "nxhawk",
   "firstName": "Nguyen",
   "lastName": "Hao",
-  "password": "12346hf23"
+  "password": "12345678"
 }
+
+###
+POST http://localhost:3002/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "nxhawk",
+  "password": "12345678"
+}
+
+###
+GET http://localhost:3002/api/auth/status
+
+###
+POST http://localhost:3002/api/auth/login
+
+###
+GET http://localhost:3002/api/users

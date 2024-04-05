@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as session from 'express-session';
+import * as passport from 'passport';
 
 async function bootstrap() {
   const { PORT, COOKIE_SECRET } = process.env;
@@ -21,6 +22,9 @@ async function bootstrap() {
       },
     }),
   );
+
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   try {
     await app.listen(PORT, () => {

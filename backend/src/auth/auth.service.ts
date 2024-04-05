@@ -1,26 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Services } from 'src/utils/constants';
+import { IUserService } from 'src/users/interfaces/user';
+import { ValidateUserDetails } from 'src/utils/types';
+import { compareHash } from 'src/utils/helpers';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
-  }
+  constructor(
+    @Inject(Services.USERS) private readonly userService: IUserService,
+  ) {}
 
-  findAll() {
-    return `This action returns all auth`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+  async validateUser(userDetails: ValidateUserDetails): Promise<any> {
+    const user = await this.userService.findUser(
+      { username: userDetails.username },
+      { selectAll: true },
+    );
+    console.log(user);
+    if (!user)
+      throw new HttpException('Invalid Credentials', HttpStatus.UNAUTHORIZED);
+    const isPasswordValid = await compareHash(
+      userDetails.password,
+      user.password,
+    );
+    return isPasswordValid ? user : null;
   }
 }
