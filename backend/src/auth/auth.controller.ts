@@ -16,6 +16,7 @@ import { IAuthService } from './auth';
 import { IUserService } from 'src/users/interfaces/user';
 import { Request, Response } from 'express';
 import { AuthenticatedGuard, LocalAuthGuard } from './utils/Guards';
+import { AuthenticatedRequest } from 'src/utils/types';
 
 @Controller(Routes.AUTH)
 export class AuthController {
@@ -39,5 +40,13 @@ export class AuthController {
   @UseGuards(AuthenticatedGuard)
   async status(@Req() req: Request, @Res() res: Response) {
     res.send(req.user);
+  }
+
+  @Post('logout')
+  @UseGuards(AuthenticatedGuard)
+  logout(@Req() req: AuthenticatedRequest, @Res() res: Response) {
+    req.logout((err) => {
+      return err ? res.send(400) : res.send(200);
+    });
   }
 }
