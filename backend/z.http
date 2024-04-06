@@ -35,3 +35,6 @@ GET http://localhost:3002/api/users/search?query=nx
 
 ###
 GET http://localhost:3002/api/users/check?username=nxhawk
+
+###
+PATCH http://localhost:3002/api/users/profile

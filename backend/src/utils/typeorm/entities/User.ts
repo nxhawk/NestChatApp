@@ -1,5 +1,12 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Profile } from './Profile';
 
 @Entity('users')
 export class User {
@@ -21,4 +28,12 @@ export class User {
   @Column({ select: false })
   @Exclude()
   password: string;
+
+  // relationship
+  // one user has one profile (one to one)
+  @OneToOne(() => Profile, (profile) => profile.user, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn()
+  profile: Profile;
 }

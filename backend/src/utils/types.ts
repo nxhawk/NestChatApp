@@ -23,6 +23,11 @@ export type FindUserOptions = Partial<{
   selectAll: boolean;
 }>;
 
+export type UserProfileFiles = Partial<{
+  banner: Express.Multer.File[];
+  avatar: Express.Multer.File[];
+}>;
+
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
