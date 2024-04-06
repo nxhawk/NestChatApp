@@ -19,6 +19,9 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:3002/api/friends/requests
+
+###
 POST http://localhost:3002/api/friends/requests
 Content-Type: application/json
 
