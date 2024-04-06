@@ -13,7 +13,7 @@ export interface IConversationsService {
     userId: number,
     recipientId: number,
   ): Promise<Conversation | undefined>;
-  // save(conversation: Conversation): Promise<Conversation>;
+  save(conversation: Conversation): Promise<Conversation>;
   // getMessages(params: GetConversationMessagesParams): Promise<Conversation>;
   // update(params: UpdateConversationParams);
 }

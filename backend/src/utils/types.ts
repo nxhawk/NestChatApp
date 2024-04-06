@@ -1,4 +1,4 @@
-import { Friend, FriendRequest, User } from './typeorm';
+import { Conversation, Friend, FriendRequest, Message, User } from './typeorm';
 import { Request } from 'express';
 
 export type CreateUserDetails = {
@@ -85,4 +85,29 @@ export type CreateConversationParams = {
 export type AccessParams = {
   id: number;
   userId: number;
+};
+
+export type CreateMessageParams = {
+  id: number;
+  content?: string;
+  //attachments?: Attachment[];
+  user: User;
+};
+
+export type CreateMessageResponse = {
+  message: Message;
+  conversation: Conversation;
+};
+
+export type DeleteMessageParams = {
+  userId: number;
+  conversationId: number;
+  messageId: number;
+};
+
+export type EditMessageParams = {
+  conversationId: number;
+  messageId: number;
+  userId: number;
+  content: string;
 };

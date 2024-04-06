@@ -11,6 +11,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerBehindProxyGuard } from './utils/throttler';
 import { FriendsModule } from './friends/friends.module';
 import { ConversationsModule } from './conversations/conversations.module';
+import { MessagesModule } from './messages/messages.module';
 
 const envFilePath = '.env.dev';
 
@@ -40,6 +41,7 @@ const envFilePath = '.env.dev';
     ]),
     FriendsModule,
     ConversationsModule,
+    MessagesModule,
   ],
   providers: [
     {

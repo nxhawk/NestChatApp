@@ -3,7 +3,7 @@ POST http://localhost:3002/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "nhan",
+  "username": "haonhat",
   "firstName": "Trong",
   "lastName": "Nhan",
   "password": "12345678"
@@ -14,7 +14,7 @@ POST http://localhost:3002/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "nxhawk",
+  "username": "haonhat",
   "password": "12345678"
 }
 
@@ -25,6 +25,14 @@ Content-Type: application/json
 {
   "username": "nxhawk",
   "password": "12345678"
+}
+
+###
+POST http://localhost:3002/api/conversations/1/messages
+Content-Type: application/json
+
+{
+  "content": "shut up, pro"
 }
 
 ###

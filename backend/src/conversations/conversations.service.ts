@@ -105,4 +105,8 @@ export class ConversationsService implements IConversationsService {
       conversation.creator.id === userId || conversation.recipient.id === userId
     );
   }
+
+  save(conversation: Conversation): Promise<Conversation> {
+    return this.conversationRepository.save(conversation);
+  }
 }
