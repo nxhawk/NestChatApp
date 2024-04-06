@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
 import { AuthenticatedGuard } from 'src/auth/utils/Guards';
 import { Routes, Services } from 'src/utils/constants';
@@ -32,5 +32,10 @@ export class ConversationsController {
   @Get()
   async getConversations(@AuthUser() { id }: User) {
     return this.conversationService.getConversations(id);
+  }
+
+  @Get(':id')
+  async getConversationById(@Param('id') id: number) {
+    return this.conversationService.findById(id);
   }
 }

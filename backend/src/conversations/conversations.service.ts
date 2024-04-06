@@ -69,6 +69,19 @@ export class ConversationsService implements IConversationsService {
     return conversation;
   }
 
+  async findById(id: number) {
+    return this.conversationRepository.findOne({
+      where: { id },
+      relations: [
+        'creator',
+        'recipient',
+        'creator.profile',
+        'recipient.profile',
+        'lastMessageSent',
+      ],
+    });
+  }
+
   async isCreated(userId: number, recipientId: number) {
     return this.conversationRepository.findOne({
       where: [
