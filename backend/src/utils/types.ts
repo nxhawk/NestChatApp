@@ -76,3 +76,8 @@ export type CancelFriendRequestParams = {
   id: number;
   userId: number;
 };
+
+export type CreateConversationParams = {
+  username: string;
+  message: string;
+};

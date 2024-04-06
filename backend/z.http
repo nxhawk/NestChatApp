@@ -28,13 +28,21 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3002/api/conversations
+Content-Type: application/json
+
+{
+  "username": "nhan",
+  "message": "Hello, nhan!"
+}
+###
 GET http://localhost:3002/api/friends
 
 ###
 DELETE http://localhost:3002/api/friends/1/delete
 
 ###
-PATCH http://localhost:3002/api/friends/requests/2/accept
+PATCH http://localhost:3002/api/friends/requests/4/accept
 
 ###
 DELETE http://localhost:3002/api/friends/requests/3/cancel
@@ -47,7 +55,7 @@ POST http://localhost:3002/api/friends/requests
 Content-Type: application/json
 
 {
-  "username": "admin"
+  "username": "nhan"
 }
 ###
 PATCH http://localhost:3002/api/users/presence/status

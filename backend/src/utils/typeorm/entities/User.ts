@@ -3,11 +3,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Profile } from './Profile';
 import { UserPresence } from './UserPresence';
+import { Message } from './Message';
 
 @Entity('users')
 export class User {
@@ -44,4 +46,9 @@ export class User {
   })
   @JoinColumn()
   presence: UserPresence;
+
+  // user can have multiple message
+  @OneToMany(() => Message, (message) => message.author)
+  @JoinColumn()
+  messages: Message[];
 }

@@ -7,6 +7,8 @@ export enum Routes {
   USER_PRESENCE = 'users/presence',
   FRIENDS = 'friends',
   FRIEND_REQUESTS = 'friends/requests',
+  CONVERSATIONS = 'conversations',
+  MESSAGES = 'conversations/:id/messages',
 }
 
 export enum Services {
@@ -19,6 +21,9 @@ export enum Services {
   CLOUDINARY_SERVICE = 'CLOUDINARY_SERVICE',
   FRIENDS_SERVICE = 'FRIENDS_SERVICE',
   FRIENDS_REQUESTS_SERVICE = 'FRIEND_REQUEST_SERVICE',
+  CONVERSATIONS = 'CONVERSATIONS_SERVICE',
+  MESSAGES = 'MESSAGE_SERVICE',
+  MESSAGE_ATTACHMENTS = 'MESSAGE_ATTACHMENTS_SERVICE',
 }
 
 export const UserProfileFileFields: MulterField[] = [

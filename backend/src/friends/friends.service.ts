@@ -59,6 +59,17 @@ export class FriendsService implements IFriendsService {
   }
 
   isFriends(userOneId: number, userTwoId: number): Promise<Friend> {
-    throw new Error('Method not implemented.');
+    return this.friendsRepository.findOne({
+      where: [
+        {
+          sender: { id: userOneId },
+          receiver: { id: userTwoId },
+        },
+        {
+          sender: { id: userTwoId },
+          receiver: { id: userOneId },
+        },
+      ],
+    });
   }
 }
