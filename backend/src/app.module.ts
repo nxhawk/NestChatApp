@@ -5,6 +5,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import entities from './utils/typeorm';
 import { PassportModule } from '@nestjs/passport';
+import { FriendRequestsModule } from './friend-requests/friend-requests.module';
+import { ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerBehindProxyGuard } from './utils/throttler';
 
 const envFilePath = '.env.dev';
 
@@ -25,7 +29,19 @@ const envFilePath = '.env.dev';
     }),
     AuthModule,
     UsersModule,
+    FriendRequestsModule,
+    ThrottlerModule.forRoot([
+      {
+        ttl: 10,
+        limit: 10,
+      },
+    ]),
   ],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerBehindProxyGuard,
+    },
+  ],
 })
 export class AppModule {}

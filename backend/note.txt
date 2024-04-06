@@ -1,0 +1,2 @@
+- emit friendrequest in createFriendRequest (controller)
+ 

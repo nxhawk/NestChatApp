@@ -49,3 +49,15 @@ export type UploadImageParams = {
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
+
+export type FriendRequestStatus = 'accepted' | 'pending' | 'rejected';
+
+export type FriendRequestParams = {
+  id: number;
+  userId: number;
+};
+
+export type CreateFriendParams = {
+  user: User;
+  username: string;
+};

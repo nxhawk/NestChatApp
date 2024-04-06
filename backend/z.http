@@ -19,6 +19,13 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3002/api/friends/requests
+Content-Type: application/json
+
+{
+  "username": "admin"
+}
+###
 PATCH http://localhost:3002/api/users/presence/status
 Content-Type: application/json
 
