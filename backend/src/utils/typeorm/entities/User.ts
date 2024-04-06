@@ -3,6 +3,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -10,6 +11,7 @@ import {
 import { Profile } from './Profile';
 import { UserPresence } from './UserPresence';
 import { Message } from './Message';
+import { Group } from './Group';
 
 @Entity('users')
 export class User {
@@ -51,4 +53,7 @@ export class User {
   @OneToMany(() => Message, (message) => message.author)
   @JoinColumn()
   messages: Message[];
+
+  @ManyToMany(() => Group, (group) => group.users)
+  groups: Group[];
 }

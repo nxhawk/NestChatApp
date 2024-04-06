@@ -28,6 +28,14 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3002/api/groups
+Content-Type: application/json
+
+{
+  "users": ["nhan", "admin"],
+  "title": "Nhom hoc tap"
+}
+###
 PATCH http://localhost:3002/api/conversations/1/messages/6
 Content-Type: application/json
 

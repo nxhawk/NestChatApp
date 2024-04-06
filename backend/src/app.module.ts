@@ -13,6 +13,7 @@ import { FriendsModule } from './friends/friends.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
 import { MessageAttachmentsModule } from './message-attachments/message-attachments.module';
+import { GroupsModule } from './groups/groups.module';
 
 const envFilePath = '.env.dev';
 
@@ -44,6 +45,7 @@ const envFilePath = '.env.dev';
     ConversationsModule,
     MessagesModule,
     MessageAttachmentsModule,
+    GroupsModule,
   ],
   providers: [
     {
