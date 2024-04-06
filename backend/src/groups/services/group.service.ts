@@ -1,12 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IGroupService } from '../interfaces/group';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Group } from 'src/utils/typeorm';
+import { Group, User } from 'src/utils/typeorm';
 import { Repository } from 'typeorm';
 import { Services } from 'src/utils/constants';
 import { IUserService } from 'src/users/interfaces/user';
 import { IImageStorageService } from 'src/image-storage/image-storage';
-import { CreateGroupParams, FetchGroupsParams } from 'src/utils/types';
+import {
+  AccessParams,
+  CreateGroupParams,
+  FetchGroupsParams,
+} from 'src/utils/types';
+import { GroupNotFoundException } from '../exceptions/GroupNotFound';
 
 @Injectable()
 export class GroupService implements IGroupService {
@@ -18,7 +23,7 @@ export class GroupService implements IGroupService {
     @Inject(Services.IMAGE_UPLOAD_SERVICE)
     private readonly imageStorageService: IImageStorageService,
   ) {}
-
+  
   async createGroup(params: CreateGroupParams) {
     const { creator, title } = params;
     const userPromise = params.users.map((username) =>
@@ -44,5 +49,25 @@ export class GroupService implements IGroupService {
       .leftJoinAndSelect('users.presence', 'usersPresence')
       .orderBy('group.lastMessageSentAt', 'DESC')
       .getMany();
+  }
+
+  findGroupById(id: number): Promise<Group> {
+    return this.groupRepository.findOne({
+      where: { id },
+      relations: [
+        'creator',
+        'users',
+        'lastMessageSent',
+        'owner',
+        'users.profile',
+        'users.presence',
+      ],
+    });
+  }
+
+  async hasAccess({ id, userId }: AccessParams): Promise<User | undefined> {
+    const group = await this.findGroupById(id);
+    if (!group) throw new GroupNotFoundException();
+    return group.users.find((user) => user.id === userId);
   }
 }
