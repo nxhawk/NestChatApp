@@ -45,6 +45,7 @@ export class UserService {
     return this.userRepository.findOne({
       where: params,
       select: options?.selectAll ? selectionsWithPassword : selections,
+      relations: ['profile', 'presence'],
     });
   }
 
@@ -63,5 +64,9 @@ export class UserService {
         //'user.profile',
       ])
       .getMany();
+  }
+
+  async saveUser(user: User) {
+    return this.userRepository.save(user);
   }
 }

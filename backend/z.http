@@ -19,6 +19,14 @@ Content-Type: application/json
 }
 
 ###
+PATCH http://localhost:3002/api/users/presence/status
+Content-Type: application/json
+
+{
+  "statusMessage": "a"
+}
+
+###
 GET http://localhost:3002/api/auth/status
 
 ###

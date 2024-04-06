@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Profile } from './Profile';
+import { UserPresence } from './UserPresence';
 
 @Entity('users')
 export class User {
@@ -36,4 +37,11 @@ export class User {
   })
   @JoinColumn()
   profile: Profile;
+
+  // one user has one presence (one to one)
+  @OneToOne(() => UserPresence, (up) => up.user, {
+    cascade: ['insert', 'update'],
+  })
+  @JoinColumn()
+  presence: UserPresence;
 }

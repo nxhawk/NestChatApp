@@ -28,6 +28,13 @@ export type UserProfileFiles = Partial<{
   avatar: Express.Multer.File[];
 }>;
 
+export type UserPresenceStatus = 'online' | 'away' | 'offline' | 'dnd';
+
+export type UpdateStatusMessageParams = {
+  user: User;
+  statusMessage: string;
+};
+
 export type UpdateUserProfileParams = Partial<{
   about: string;
   banner: Express.Multer.File;
