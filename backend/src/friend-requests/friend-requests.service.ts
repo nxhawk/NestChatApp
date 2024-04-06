@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { IFriendRequestService } from './friend-requests';
 import {
   AcceptFriendRequestResponse,
+  CancelFriendRequestParams,
   CreateFriendParams,
   FriendRequestParams,
 } from 'src/utils/types';
@@ -77,6 +78,25 @@ export class FriendRequestsService implements IFriendRequestService {
     });
     const friend = await this.friendRepository.save(newFriend);
     return { friend, friendRequest: updatedFriendRequest };
+  }
+
+  async cancel({ id, userId }: CancelFriendRequestParams) {
+    const friendRequest = await this.findById(id);
+    if (!friendRequest) throw new FriendRequestNotFoundException();
+    if (friendRequest.sender.id !== userId) throw new FriendRequestException();
+    await this.friendRequestRepository.delete(id);
+    return friendRequest;
+  }
+
+  async reject({ id, userId }: CancelFriendRequestParams) {
+    const friendRequest = await this.findById(id);
+    if (!friendRequest) throw new FriendRequestNotFoundException();
+    if (friendRequest.status === 'accepted')
+      throw new FriendRequestAcceptedException();
+    if (friendRequest.receiver.id !== userId)
+      throw new FriendRequestException();
+    friendRequest.status = 'rejected';
+    return this.friendRequestRepository.save(friendRequest);
   }
 
   isPending(userOneId: number, userTwoId: number) {

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Inject,
   Param,
@@ -49,6 +50,28 @@ export class FriendRequestsController {
     @Param('id', ParseIntPipe) id: number,
   ) {
     const response = await this.friendRequestService.accept({ id, userId });
+    // socket here
+    return response;
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 10 } })
+  @Delete(':id/cancel')
+  async cancelFriendRequest(
+    @AuthUser() { id: userId }: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const response = await this.friendRequestService.cancel({ id, userId });
+    // socket here
+    return response;
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 10 } })
+  @Patch(':id/reject')
+  async rejectFriendRequest(
+    @AuthUser() { id: userId }: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const response = await this.friendRequestService.reject({ id, userId });
     // socket here
     return response;
   }
