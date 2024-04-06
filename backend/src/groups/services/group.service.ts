@@ -6,7 +6,7 @@ import { Repository } from 'typeorm';
 import { Services } from 'src/utils/constants';
 import { IUserService } from 'src/users/interfaces/user';
 import { IImageStorageService } from 'src/image-storage/image-storage';
-import { CreateGroupParams } from 'src/utils/types';
+import { CreateGroupParams, FetchGroupsParams } from 'src/utils/types';
 
 @Injectable()
 export class GroupService implements IGroupService {
@@ -29,5 +29,20 @@ export class GroupService implements IGroupService {
     const groupParams = { owner: creator, users, creator, title };
     const group = this.groupRepository.create(groupParams);
     return await this.groupRepository.save(group);
+  }
+
+  getGroups(params: FetchGroupsParams): Promise<Group[]> {
+    return this.groupRepository
+      .createQueryBuilder('group')
+      .leftJoinAndSelect('group.users', 'user')
+      .where('user.id IN (:...users)', { users: [params.userId] })
+      .leftJoinAndSelect('group.users', 'users')
+      .leftJoinAndSelect('group.creator', 'creator')
+      .leftJoinAndSelect('group.owner', 'owner')
+      .leftJoinAndSelect('group.lastMessageSent', 'lastMessageSent')
+      .leftJoinAndSelect('users.profile', 'usersProfile')
+      .leftJoinAndSelect('users.presence', 'usersPresence')
+      .orderBy('group.lastMessageSentAt', 'DESC')
+      .getMany();
   }
 }

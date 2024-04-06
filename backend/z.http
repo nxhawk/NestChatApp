@@ -28,6 +28,9 @@ Content-Type: application/json
 }
 
 ###
+GET http://localhost:3002/api/groups
+
+###
 POST http://localhost:3002/api/groups
 Content-Type: application/json
 

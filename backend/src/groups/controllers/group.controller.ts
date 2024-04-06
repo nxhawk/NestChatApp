@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
 import { Routes, Services } from 'src/utils/constants';
 import { IGroupService } from '../interfaces/group';
@@ -21,5 +21,10 @@ export class GroupController {
     });
     // socket here
     return group;
+  }
+
+  @Get()
+  getGroups(@AuthUser() user: User) {
+    return this.groupService.getGroups({ userId: user.id });
   }
 }
