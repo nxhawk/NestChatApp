@@ -6,11 +6,12 @@ import { Repository } from 'typeorm';
 import { Services } from 'src/utils/constants';
 import { IUserService } from 'src/users/interfaces/user';
 import { IFriendsService } from 'src/friends/friends';
-import { CreateConversationParams } from 'src/utils/types';
+import { AccessParams, CreateConversationParams } from 'src/utils/types';
 import { UserNotFoundException } from 'src/users/exceptions/UserNotFound';
 import { CreateConversationException } from './exceptions/CreateConversation';
 import { FriendNotFoundException } from 'src/friends/exceptions/FriendNotFound';
 import { ConversationExistsException } from './exceptions/ConversationExists';
+import { ConversationNotFoundException } from './exceptions/ConversationNotFound';
 
 @Injectable()
 export class ConversationsService implements IConversationsService {
@@ -95,5 +96,13 @@ export class ConversationsService implements IConversationsService {
         },
       ],
     });
+  }
+
+  async hasAccess({ id, userId }: AccessParams) {
+    const conversation = await this.findById(id);
+    if (!conversation) throw new ConversationNotFoundException();
+    return (
+      conversation.creator.id === userId || conversation.recipient.id === userId
+    );
   }
 }

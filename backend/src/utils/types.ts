@@ -81,3 +81,8 @@ export type CreateConversationParams = {
   username: string;
   message: string;
 };
+
+export type AccessParams = {
+  id: number;
+  userId: number;
+};

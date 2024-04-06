@@ -28,7 +28,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:3002/api/conversations
+GET http://localhost:3002/api/conversations/1
 
 ###
 POST http://localhost:3002/api/conversations
