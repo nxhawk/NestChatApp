@@ -6,6 +6,7 @@ import {
   Inject,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -19,6 +20,7 @@ import { CreateMessageDto } from './dtos/CreateMessage.dto';
 import { EmptyMessageException } from './exceptions/EmptyMessage';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Attachment } from 'src/utils/types';
+import { EditMessageDto } from './dtos/EditMessage.dto';
 
 @Controller(Routes.MESSAGES)
 export class MessagesController {
@@ -67,5 +69,18 @@ export class MessagesController {
     await this.messageService.deleteMessage(params);
     // socket here
     return { conversationId, messageId };
+  }
+
+  @Patch(':messageId')
+  async editMessage(
+    @AuthUser() { id: userId }: User,
+    @Param('id') conversationId: number,
+    @Param('messageId') messageId: number,
+    @Body() { content }: EditMessageDto,
+  ) {
+    const params = { userId, content, conversationId, messageId };
+    const message = await this.messageService.editMessage(params);
+    // socket here
+    return message;
   }
 }

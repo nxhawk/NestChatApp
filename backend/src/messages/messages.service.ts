@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IConversationsService } from 'src/conversations/conversations';
 import { IFriendsService } from 'src/friends/friends';
@@ -14,7 +14,7 @@ import {
 } from 'src/utils/types';
 import { ConversationNotFoundException } from 'src/conversations/exceptions/ConversationNotFound';
 import { FriendNotFoundException } from 'src/friends/exceptions/FriendNotFound';
-import { CannotCreateMessageException } from './dtos/CannotCreateMessage';
+import { CannotCreateMessageException } from './exceptions/CannotCreateMessage';
 import { instanceToPlain } from 'class-transformer';
 import { IMessageAttachmentsService } from 'src/message-attachments/message-attachments';
 import { buildFindMessageParams } from 'src/utils/builders';
@@ -104,7 +104,25 @@ export class MessagesService implements IMessageService {
     return this.messageRepository.delete({ id: message.id });
   }
 
-  editMessage(params: EditMessageParams): Promise<Message> {
-    throw new Error('Method not implemented.');
+  async editMessage(params: EditMessageParams): Promise<Message> {
+    const messageDB = await this.messageRepository.findOne({
+      where: {
+        id: params.messageId,
+        author: { id: params.userId },
+      },
+      relations: [
+        'conversation',
+        'conversation.creator',
+        'conversation.recipient',
+        'author',
+        'author.profile',
+      ],
+    });
+    if (!messageDB)
+      throw new HttpException('Cannot Edit Message', HttpStatus.BAD_REQUEST);
+    if (messageDB.conversation.id != params.conversationId)
+      throw new HttpException('Cannot Edit Message', HttpStatus.BAD_REQUEST);
+    messageDB.content = params.content;
+    return this.messageRepository.save(messageDB);
   }
 }

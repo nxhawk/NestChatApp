@@ -28,7 +28,14 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3002/api/conversations/1/messages/1
+PATCH http://localhost:3002/api/conversations/1/messages/6
+Content-Type: application/json
+
+{
+  "content": "hello world 12"
+}
+###
+DELETE http://localhost:3002/api/conversations/1/messages/5
 
 ###
 GET http://localhost:3002/api/conversations/1/messages
