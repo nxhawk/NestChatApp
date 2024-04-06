@@ -17,17 +17,27 @@ Content-Type: application/json
   "username": "nxhawk",
   "password": "12345678"
 }
+
 ###
 POST http://localhost:3002/api/auth/login
 Content-Type: application/json
 
 {
-  "username": "nhan",
+  "username": "nxhawk",
   "password": "12345678"
 }
 
 ###
+GET http://localhost:3002/api/friends
+
+###
+DELETE http://localhost:3002/api/friends/1/delete
+
+###
 PATCH http://localhost:3002/api/friends/requests/2/accept
+
+###
+DELETE http://localhost:3002/api/friends/requests/3/cancel
 
 ###
 GET http://localhost:3002/api/friends/requests
@@ -37,7 +47,7 @@ POST http://localhost:3002/api/friends/requests
 Content-Type: application/json
 
 {
-  "username": "nxhawk"
+  "username": "admin"
 }
 ###
 PATCH http://localhost:3002/api/users/presence/status
