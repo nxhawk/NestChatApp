@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
 import { SkipThrottle } from '@nestjs/throttler';
 import { AuthenticatedGuard } from 'src/auth/utils/Guards';
 import { Routes, Services } from 'src/utils/constants';
@@ -27,5 +27,10 @@ export class ConversationsController {
     );
     // socket here
     return conversation;
+  }
+
+  @Get()
+  async getConversations(@AuthUser() { id }: User) {
+    return this.conversationService.getConversations(id);
   }
 }

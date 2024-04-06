@@ -6,7 +6,7 @@ export interface IConversationsService {
     user: User,
     conversationParams: CreateConversationParams,
   ): Promise<Conversation>;
-  // getConversations(id: number): Promise<Conversation[]>;
+  getConversations(id: number): Promise<Conversation[]>;
   // findById(id: number): Promise<Conversation | undefined>;
   // hasAccess(params: AccessParams): Promise<boolean>;
   isCreated(

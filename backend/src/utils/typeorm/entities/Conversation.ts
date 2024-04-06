@@ -37,4 +37,8 @@ export class Conversation {
     cascade: ['insert', 'remove', 'update'],
   })
   messages: Message[];
+
+  @OneToOne(() => Message)
+  @JoinColumn({ name: 'last_message_sent' })
+  lastMessageSent: Message;
 }

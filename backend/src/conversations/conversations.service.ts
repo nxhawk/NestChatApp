@@ -25,6 +25,20 @@ export class ConversationsService implements IConversationsService {
     private readonly friendsService: IFriendsService,
   ) {}
 
+  async getConversations(id: number): Promise<Conversation[]> {
+    return this.conversationRepository
+      .createQueryBuilder('conversation')
+      .leftJoinAndSelect('conversation.lastMessageSent', 'lastMessageSent')
+      .leftJoinAndSelect('conversation.creator', 'creator')
+      .leftJoinAndSelect('conversation.recipient', 'recipient')
+      .leftJoinAndSelect('creator.profile', 'creatorProfile')
+      .leftJoinAndSelect('recipient.profile', 'recipientProfile')
+      .where('creator.id = :id', { id })
+      .orWhere('recipient.id = :id', { id })
+      .orderBy('conversation.lastMessageSentAt', 'DESC')
+      .getMany();
+  }
+
   async createConversation(creator: User, params: CreateConversationParams) {
     const { username, message: content } = params;
     const recipient = await this.userService.findUser({ username });
