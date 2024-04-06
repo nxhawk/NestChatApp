@@ -1,4 +1,11 @@
-import { Conversation, Friend, FriendRequest, Message, User } from './typeorm';
+import {
+  Conversation,
+  Friend,
+  FriendRequest,
+  Message,
+  MessageAttachment,
+  User,
+} from './typeorm';
 import { Request } from 'express';
 
 export type CreateUserDetails = {
@@ -87,10 +94,22 @@ export type AccessParams = {
   userId: number;
 };
 
+export interface Attachment extends Express.Multer.File {}
+
+export type UploadMessageAttachmentParams = {
+  file: Attachment;
+  messageAttachment: MessageAttachment;
+};
+
+// export type UploadGroupMessageAttachmentParams = {
+//   file: Attachment;
+//   messageAttachment: GroupMessageAttachment;
+// };
+
 export type CreateMessageParams = {
   id: number;
   content?: string;
-  //attachments?: Attachment[];
+  attachments?: Attachment[];
   user: User;
 };
 

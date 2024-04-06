@@ -12,6 +12,7 @@ import { ThrottlerBehindProxyGuard } from './utils/throttler';
 import { FriendsModule } from './friends/friends.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
+import { MessageAttachmentsModule } from './message-attachments/message-attachments.module';
 
 const envFilePath = '.env.dev';
 
@@ -42,6 +43,7 @@ const envFilePath = '.env.dev';
     FriendsModule,
     ConversationsModule,
     MessagesModule,
+    MessageAttachmentsModule,
   ],
   providers: [
     {

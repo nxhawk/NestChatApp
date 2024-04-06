@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IImageStorageService } from './image-storage';
-import { UploadImageParams } from 'src/utils/types';
+import {
+  UploadImageParams,
+  UploadMessageAttachmentParams,
+} from 'src/utils/types';
 import { Services } from 'src/utils/constants';
 
 @Injectable()
@@ -11,5 +14,10 @@ export class ImageStorageService implements IImageStorageService {
 
   upload(params: UploadImageParams) {
     return this.cloudinaryService.uploadImage(params.file);
+  }
+
+  async uploadMessageAttachment(params: UploadMessageAttachmentParams) {
+    console.log(params);
+    return params.messageAttachment;
   }
 }
