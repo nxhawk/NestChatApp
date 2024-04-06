@@ -9,6 +9,7 @@ import { FriendRequestsModule } from './friend-requests/friend-requests.module';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerBehindProxyGuard } from './utils/throttler';
+import { FriendsModule } from './friends/friends.module';
 
 const envFilePath = '.env.dev';
 
@@ -36,6 +37,7 @@ const envFilePath = '.env.dev';
         limit: 10,
       },
     ]),
+    FriendsModule,
   ],
   providers: [
     {

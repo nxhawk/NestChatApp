@@ -1,4 +1,4 @@
-import { User } from './typeorm';
+import { Friend, FriendRequest, User } from './typeorm';
 import { Request } from 'express';
 
 export type CreateUserDetails = {
@@ -60,4 +60,14 @@ export type FriendRequestParams = {
 export type CreateFriendParams = {
   user: User;
   username: string;
+};
+
+export type AcceptFriendRequestResponse = {
+  friend: Friend;
+  friendRequest: FriendRequest;
+};
+
+export type DeleteFriendRequestParams = {
+  id: number;
+  userId: number;
 };

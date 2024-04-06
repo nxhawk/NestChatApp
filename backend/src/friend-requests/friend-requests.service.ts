@@ -1,22 +1,33 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { IFriendRequestService } from './friend-requests';
-import { CreateFriendParams } from 'src/utils/types';
+import {
+  AcceptFriendRequestResponse,
+  CreateFriendParams,
+  FriendRequestParams,
+} from 'src/utils/types';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FriendRequest } from 'src/utils/typeorm';
+import { Friend, FriendRequest } from 'src/utils/typeorm';
 import { Repository } from 'typeorm';
 import { IUserService } from 'src/users/interfaces/user';
 import { Services } from 'src/utils/constants';
 import { UserNotFoundException } from 'src/users/exceptions/UserNotFound';
 import { FriendRequestPending } from './exceptions/FriendRequestPending';
 import { FriendRequestException } from './exceptions/FriendRequest';
+import { FriendRequestNotFoundException } from './exceptions/FriendRequestNotFound';
+import { FriendRequestAcceptedException } from './exceptions/FriendRequestAccepted';
+import { IFriendsService } from 'src/friends/friends';
 
 @Injectable()
 export class FriendRequestsService implements IFriendRequestService {
   constructor(
     @InjectRepository(FriendRequest)
     private readonly friendRequestRepository: Repository<FriendRequest>,
+    @InjectRepository(Friend)
+    private readonly friendRepository: Repository<Friend>,
     @Inject(Services.USERS)
     private readonly userService: IUserService,
+    @Inject(Services.FRIENDS_SERVICE)
+    private readonly friendsService: IFriendsService,
   ) {}
 
   getFriendRequests(id: number): Promise<FriendRequest[]> {
@@ -47,6 +58,27 @@ export class FriendRequestsService implements IFriendRequestService {
     return this.friendRequestRepository.save(friend);
   }
 
+  async accept({
+    id,
+    userId,
+  }: FriendRequestParams): Promise<AcceptFriendRequestResponse> {
+    const friendRequest = await this.findById(id);
+    if (!friendRequest) throw new FriendRequestNotFoundException();
+    if (friendRequest.status === 'accepted')
+      throw new FriendRequestAcceptedException();
+    if (friendRequest.receiver.id !== userId)
+      throw new FriendRequestException();
+    friendRequest.status = 'accepted';
+    const updatedFriendRequest =
+      await this.friendRequestRepository.save(friendRequest);
+    const newFriend = await this.friendRepository.create({
+      sender: friendRequest.sender,
+      receiver: friendRequest.receiver,
+    });
+    const friend = await this.friendRepository.save(newFriend);
+    return { friend, friendRequest: updatedFriendRequest };
+  }
+
   isPending(userOneId: number, userTwoId: number) {
     return this.friendRequestRepository.findOne({
       where: [
@@ -61,6 +93,13 @@ export class FriendRequestsService implements IFriendRequestService {
           status: 'pending',
         },
       ],
+    });
+  }
+
+  findById(id: number): Promise<FriendRequest> {
+    return this.friendRequestRepository.findOne({
+      where: { id },
+      relations: ['receiver', 'sender'],
     });
   }
 }

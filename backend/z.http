@@ -3,9 +3,9 @@ POST http://localhost:3002/api/auth/register
 Content-Type: application/json
 
 {
-  "username": "nxhawk",
-  "firstName": "Nguyen",
-  "lastName": "Hao",
+  "username": "nhan",
+  "firstName": "Trong",
+  "lastName": "Nhan",
   "password": "12345678"
 }
 
@@ -17,6 +17,17 @@ Content-Type: application/json
   "username": "nxhawk",
   "password": "12345678"
 }
+###
+POST http://localhost:3002/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "nhan",
+  "password": "12345678"
+}
+
+###
+PATCH http://localhost:3002/api/friends/requests/2/accept
 
 ###
 GET http://localhost:3002/api/friends/requests
@@ -26,7 +37,7 @@ POST http://localhost:3002/api/friends/requests
 Content-Type: application/json
 
 {
-  "username": "admin"
+  "username": "nxhawk"
 }
 ###
 PATCH http://localhost:3002/api/users/presence/status

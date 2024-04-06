@@ -1,4 +1,14 @@
-import { Body, Controller, Get, Inject, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { Routes, Services } from 'src/utils/constants';
 import { AuthUser } from 'src/utils/decorators';
 import { User } from 'src/utils/typeorm';
@@ -27,8 +37,19 @@ export class FriendRequestsController {
     @Body() { username }: CreateFriendDto,
   ) {
     const params = { user, username };
-    console.log(params);
     const friendRequest = await this.friendRequestService.create(params);
+    // socket here
     return friendRequest;
+  }
+
+  @Throttle({ default: { limit: 3, ttl: 10 } })
+  @Patch(':id/accept')
+  async acceptFriendRequest(
+    @AuthUser() { id: userId }: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const response = await this.friendRequestService.accept({ id, userId });
+    // socket here
+    return response;
   }
 }

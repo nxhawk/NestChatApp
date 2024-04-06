@@ -1,6 +1,4 @@
-import { FriendRequestStatus } from 'src/utils/types';
 import {
-  Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
@@ -10,16 +8,13 @@ import {
 } from 'typeorm';
 import { User } from './User';
 
-@Entity({ name: 'friend_request' })
-export class FriendRequest {
+@Entity({ name: 'friends' })
+export class Friend {
   @PrimaryGeneratedColumn()
   id: number;
 
   @CreateDateColumn()
   createdAt: Timestamp;
-
-  @Column()
-  status: FriendRequestStatus;
 
   // relationship
   @OneToOne(() => User, { createForeignKeyConstraints: false })
