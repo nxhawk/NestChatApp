@@ -6,9 +6,10 @@ import { UserService } from './services/users.service';
 import { Services } from 'src/utils/constants';
 import { UserProfileController } from './controllers/users-profile.controller';
 import { UserProfileService } from './services/users-profile.service';
+import { ImageStorageModule } from 'src/image-storage/image-storage.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Profile])],
+  imports: [TypeOrmModule.forFeature([User, Profile]), ImageStorageModule],
   controllers: [UsersController, UserProfileController],
   providers: [
     {

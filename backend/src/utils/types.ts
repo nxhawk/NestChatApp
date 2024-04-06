@@ -28,6 +28,17 @@ export type UserProfileFiles = Partial<{
   avatar: Express.Multer.File[];
 }>;
 
+export type UpdateUserProfileParams = Partial<{
+  about: string;
+  banner: Express.Multer.File;
+  avatar: Express.Multer.File;
+}>;
+
+export type UploadImageParams = {
+  key: string;
+  file: Express.Multer.File;
+};
+
 export interface AuthenticatedRequest extends Request {
   user: User;
 }
