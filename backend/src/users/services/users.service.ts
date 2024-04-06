@@ -47,4 +47,21 @@ export class UserService {
       select: options?.selectAll ? selectionsWithPassword : selections,
     });
   }
+
+  searchUsers(query: string) {
+    const statement = '(user.username LIKE :query)';
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where(statement, { query: `%${query}%` })
+      .limit(10)
+      .select([
+        'user.username',
+        'user.firstName',
+        'user.lastName',
+        'user.email',
+        'user.id',
+        //'user.profile',
+      ])
+      .getMany();
+  }
 }
