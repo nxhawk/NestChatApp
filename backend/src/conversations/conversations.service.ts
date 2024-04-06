@@ -6,7 +6,12 @@ import { Repository } from 'typeorm';
 import { Services } from 'src/utils/constants';
 import { IUserService } from 'src/users/interfaces/user';
 import { IFriendsService } from 'src/friends/friends';
-import { AccessParams, CreateConversationParams } from 'src/utils/types';
+import {
+  AccessParams,
+  CreateConversationParams,
+  GetConversationMessagesParams,
+  UpdateConversationParams,
+} from 'src/utils/types';
 import { UserNotFoundException } from 'src/users/exceptions/UserNotFound';
 import { CreateConversationException } from './exceptions/CreateConversation';
 import { FriendNotFoundException } from 'src/friends/exceptions/FriendNotFound';
@@ -108,5 +113,23 @@ export class ConversationsService implements IConversationsService {
 
   save(conversation: Conversation): Promise<Conversation> {
     return this.conversationRepository.save(conversation);
+  }
+
+  getMessages({
+    id,
+    limit,
+  }: GetConversationMessagesParams): Promise<Conversation> {
+    return this.conversationRepository
+      .createQueryBuilder('conversation')
+      .leftJoinAndSelect('conversation.lastMessageSent', 'lastMessageSent')
+      .leftJoinAndSelect('conversation.messages', 'message')
+      .where('conversation.id = :id', { id })
+      .orderBy('message.createdAt', 'DESC')
+      .limit(limit)
+      .getOne();
+  }
+
+  update({ id, lastMessageSent }: UpdateConversationParams) {
+    return this.conversationRepository.update(id, { lastMessageSent });
   }
 }

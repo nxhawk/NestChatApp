@@ -28,6 +28,12 @@ Content-Type: application/json
 }
 
 ###
+DELETE http://localhost:3002/api/conversations/1/messages/1
+
+###
+GET http://localhost:3002/api/conversations/1/messages
+
+###
 POST http://localhost:3002/api/conversations/1/messages
 Content-Type: application/json
 

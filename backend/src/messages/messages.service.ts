@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { IConversationsService } from 'src/conversations/conversations';
 import { IFriendsService } from 'src/friends/friends';
 import { Services } from 'src/utils/constants';
-import { Message } from 'src/utils/typeorm';
+import { Conversation, Message } from 'src/utils/typeorm';
 import { Repository } from 'typeorm';
 import { IMessageService } from './messages';
 import {
@@ -17,6 +17,8 @@ import { FriendNotFoundException } from 'src/friends/exceptions/FriendNotFound';
 import { CannotCreateMessageException } from './dtos/CannotCreateMessage';
 import { instanceToPlain } from 'class-transformer';
 import { IMessageAttachmentsService } from 'src/message-attachments/message-attachments';
+import { buildFindMessageParams } from 'src/utils/builders';
+import { CannotDeleteMessage } from './exceptions/CannotDeleteMessage';
 
 @Injectable()
 export class MessagesService implements IMessageService {
@@ -59,15 +61,50 @@ export class MessagesService implements IMessageService {
     return { message: savedMessage, conversation: updated };
   }
 
-  getMessages(id: number): Promise<Message[]> {
-    throw new Error('Method not implemented.');
+  getMessages(conversationId: number): Promise<Message[]> {
+    return this.messageRepository.find({
+      relations: ['author', 'attachments', 'author.profile'],
+      where: { conversation: { id: conversationId } },
+      order: { createdAt: 'DESC' },
+    });
   }
-  deleteMessage(params: DeleteMessageParams) {
-    throw new Error('Method not implemented.');
+
+  async deleteMessage(params: DeleteMessageParams) {
+    const { conversationId } = params;
+    const msgParams = { id: conversationId, limit: 10 };
+    const conversation = await this.conversationService.getMessages(msgParams);
+    if (!conversation) throw new ConversationNotFoundException();
+    const findMessageParams = buildFindMessageParams(params);
+    const message = await this.messageRepository.findOne({
+      where: findMessageParams,
+    });
+    if (!message) throw new CannotDeleteMessage();
+    if (conversation.lastMessageSent.id !== message.id)
+      return this.messageRepository.delete({ id: message.id });
+    return this.deleteLastMessage(conversation, message);
   }
+
+  async deleteLastMessage(conversation: Conversation, message: Message) {
+    const size = conversation.messages.length;
+    const SECOND_MESSAGE_INDEX = 1;
+    if (size <= 1) {
+      console.log('Last Message Sent is deleted');
+      await this.conversationService.update({
+        id: conversation.id,
+        lastMessageSent: null,
+      });
+    } else {
+      console.log('There are more than 1 message');
+      const newLastMessage = conversation.messages[SECOND_MESSAGE_INDEX];
+      await this.conversationService.update({
+        id: conversation.id,
+        lastMessageSent: newLastMessage,
+      });
+    }
+    return this.messageRepository.delete({ id: message.id });
+  }
+
   editMessage(params: EditMessageParams): Promise<Message> {
     throw new Error('Method not implemented.');
   }
-
-
 }

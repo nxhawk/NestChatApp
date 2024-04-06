@@ -89,6 +89,22 @@ export type CreateConversationParams = {
   message: string;
 };
 
+export type UpdateConversationParams = Partial<{
+  id: number;
+  lastMessageSent: Message;
+}>;
+
+export type GetConversationMessagesParams = {
+  id: number;
+  limit: number;
+};
+
+export type FindMessageParams = {
+  userId: number;
+  conversationId: number;
+  messageId: number;
+};
+
 export type AccessParams = {
   id: number;
   userId: number;

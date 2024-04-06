@@ -1,6 +1,8 @@
 import {
   Body,
   Controller,
+  Delete,
+  Get,
   Inject,
   Param,
   ParseIntPipe,
@@ -10,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { Routes, Services } from 'src/utils/constants';
 import { IMessageService } from './messages';
-import { Throttle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { AuthUser } from 'src/utils/decorators';
 import { User } from 'src/utils/typeorm';
 import { CreateMessageDto } from './dtos/CreateMessage.dto';
@@ -44,6 +46,26 @@ export class MessagesController {
     if (!content) throw new EmptyMessageException();
     const params = { user, id, content, attachments };
     const response = await this.messageService.createMessage(params);
+    // socket here
     return response;
+  }
+
+  @Get()
+  @SkipThrottle()
+  async getMessagesFromConversation(@Param('id', ParseIntPipe) id: number) {
+    const messages = await this.messageService.getMessages(id);
+    return { id, messages };
+  }
+
+  @Delete(':messageId')
+  async deleteMessageFromConversation(
+    @AuthUser() user: User,
+    @Param('id', ParseIntPipe) conversationId: number,
+    @Param('messageId', ParseIntPipe) messageId: number,
+  ) {
+    const params = { userId: user.id, conversationId, messageId };
+    await this.messageService.deleteMessage(params);
+    // socket here
+    return { conversationId, messageId };
   }
 }
