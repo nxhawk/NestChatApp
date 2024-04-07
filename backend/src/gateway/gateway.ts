@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -50,5 +51,36 @@ export class MessagingGateway
     console.log('handleDisconnect');
     console.log(`${socket.user.username} disconnected.`);
     this.sessions.removeUserSocket(socket.user.id);
+  }
+
+  @SubscribeMessage('getOnlineGroupUsers')
+  async handleGetOnlineGroupUsers(
+    @MessageBody() data: any,
+    @ConnectedSocket() socket: AuthenticatedSocket,
+  ) {
+    const group = await this.groupsService.findGroupById(
+      parseInt(data.groupId),
+    );
+    if (!group) return;
+    const onlineUsers = [];
+    const offlineUsers = [];
+    group.users.forEach((user) => {
+      const socket = this.sessions.getUserSocket(user.id);
+      socket ? onlineUsers.push(user) : offlineUsers.push(user);
+    });
+    socket.emit('onlineGroupUsersReceived', { onlineUsers, offlineUsers });
+  }
+
+  @SubscribeMessage('onConversationJoin')
+  onConversationJoin(
+    @MessageBody() data: any,
+    @ConnectedSocket() client: AuthenticatedSocket,
+  ) {
+    console.log(
+      `${client.user?.id} joined a Conversation of ID: ${data.conversationId}`,
+    );
+    client.join(`conversation-${data.conversationId}`);
+    console.log(client.rooms);
+    client.to(`conversation-${data.conversationId}`).emit('userJoin');
   }
 }
