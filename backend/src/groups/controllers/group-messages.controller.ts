@@ -1,7 +1,7 @@
-import { Body, Controller, Inject, Param, ParseIntPipe, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Get, Inject, Param, ParseIntPipe, Post, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { Routes, Services } from 'src/utils/constants';
 import { IGroupMessageService } from '../interfaces/group-messages';
-import { Throttle } from '@nestjs/throttler';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AuthUser } from 'src/utils/decorators';
 import { User } from 'src/utils/typeorm';
@@ -37,5 +37,12 @@ export class GroupMessageController {
     const response = await this.groupMessageService.createGroupMessage(params);
     // socket here
     return response;
+  }
+
+  @Get()
+  @SkipThrottle()
+  async getGroupMessages(@Param('id', ParseIntPipe) id: number) {
+    const messages = await this.groupMessageService.getGroupMessages(id);
+    return { id, messages };
   }
 }

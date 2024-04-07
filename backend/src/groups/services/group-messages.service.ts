@@ -23,7 +23,7 @@ export class GroupMessageService implements IGroupMessageService {
     @Inject(Services.MESSAGE_ATTACHMENTS)
     private readonly messageAttachmentsService: IMessageAttachmentsService,
   ) {}
-
+  
   async createGroupMessage({
     groupId: id,
     ...params
@@ -45,5 +45,15 @@ export class GroupMessageService implements IGroupMessageService {
     group.lastMessageSent = savedMessage;
     const updatedGroup = await this.groupService.saveGroup(group);
     return { message: savedMessage, group: updatedGroup };
+  }
+
+  getGroupMessages(id: number): Promise<GroupMessage[]> {
+    return this.groupMessageRepository.find({
+      where: { group: { id } },
+      relations: ['author', 'attachments', 'author.profile'],
+      order: {
+        createdAt: 'DESC',
+      },
+    });
   }
 }
