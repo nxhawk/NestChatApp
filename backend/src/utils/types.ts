@@ -162,3 +162,9 @@ export type TransferOwnerParams = {
   groupId: number;
   newOwnerId: number;
 };
+
+export type UpdateGroupDetailsParams = {
+  id: number;
+  title?: string;
+  avatar?: Attachment;
+};

@@ -11,11 +11,13 @@ import {
   CreateGroupParams,
   FetchGroupsParams,
   TransferOwnerParams,
+  UpdateGroupDetailsParams,
 } from 'src/utils/types';
 import { GroupNotFoundException } from '../exceptions/GroupNotFound';
 import { GroupOwnerTransferException } from '../exceptions/GroupOwnerTransfer';
 import { UserNotFoundException } from 'src/users/exceptions/UserNotFound';
 import { NotInGroupException } from '../exceptions/NotInGroup';
+import { generateUUIDV4 } from 'src/utils/helpers';
 
 @Injectable()
 export class GroupService implements IGroupService {
@@ -91,6 +93,21 @@ export class GroupService implements IGroupService {
     const newOwner = await this.userService.findUser({ id: newOwnerId });
     if (!newOwner) throw new UserNotFoundException();
     group.owner = newOwner;
+    return this.groupRepository.save(group);
+  }
+
+  async updateDetails(params: UpdateGroupDetailsParams): Promise<Group> {
+    const group = await this.findGroupById(params.id);
+    if (!group) throw new GroupNotFoundException();
+    if (params.avatar) {
+      const key = generateUUIDV4();
+      const res = await this.imageStorageService.upload({
+        key,
+        file: params.avatar,
+      });
+      group.avatar = res.url;
+    }
+    group.title = params.title ?? group.title;
     return this.groupRepository.save(group);
   }
 }
