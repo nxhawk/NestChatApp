@@ -14,6 +14,8 @@ import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
 import { MessageAttachmentsModule } from './message-attachments/message-attachments.module';
 import { GroupsModule } from './groups/groups.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
+import { GatewayModule } from './gateway/gateway.module';
 
 const envFilePath = '.env.dev';
 
@@ -32,6 +34,8 @@ const envFilePath = '.env.dev';
       logging: false,
       synchronize: true,
     }),
+    GatewayModule,
+    EventEmitterModule.forRoot(),
     AuthModule,
     UsersModule,
     FriendRequestsModule,
