@@ -200,3 +200,13 @@ export type AddGroupUserResponse = {
   group: Group;
   user: User;
 };
+
+export type LeaveGroupParams = {
+  id: number;
+  userId: number;
+};
+
+export type CheckUserGroupParams = {
+  id: number;
+  userId: number;
+};

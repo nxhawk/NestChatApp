@@ -19,6 +19,9 @@ Content-Type: application/json
 }
 
 ###
+DELETE http://localhost:3002/api/groups/2/recipients/1
+
+###
 POST http://localhost:3002/api/auth/login
 Content-Type: application/json
 
@@ -28,10 +31,17 @@ Content-Type: application/json
 }
 
 ###
+POST http://localhost:3002/api/groups/2/recipients
+Content-Type: application/json
+
+{
+  "username": "haonhat"
+}
+###
 DELETE http://localhost:3002/api/groups/1/messages/1
 
 ###
-GET http://localhost:3002/api/groups/1/messages
+GET http://localhost:3002/api/groups/2/messages
 ###
 PATCH http://localhost:3002/api/groups/1/owner
 Content-Type: application/json
@@ -40,7 +50,7 @@ Content-Type: application/json
   "newOwnerId": 1
 }
 ###
-GET http://localhost:3002/api/groups/1
+GET http://localhost:3002/api/groups/2
 
 ###
 POST http://localhost:3002/api/groups
@@ -48,7 +58,7 @@ Content-Type: application/json
 
 {
   "users": ["nhan", "admin"],
-  "title": "Nhom hoc tap"
+  "title": "Nhom hoc tap 2"
 }
 ###
 PATCH http://localhost:3002/api/conversations/1/messages/6

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Inject,
   Param,
   ParseIntPipe,
@@ -31,5 +32,18 @@ export class GroupRecipientsController {
     const response = await this.groupRecipientService.addGroupRecipient(params);
     // socket here
     return response;
+  }
+
+  @Delete('leave')
+  async leaveGroup(
+    @AuthUser() user: User,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    const group = await this.groupRecipientService.leaveGroup({
+      id,
+      userId: user.id,
+    });
+    // socket here
+    return group;
   }
 }
