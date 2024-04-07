@@ -19,7 +19,7 @@ Content-Type: application/json
 }
 
 ###
-DELETE http://localhost:3002/api/groups/2/recipients/1
+DELETE http://localhost:3002/api/groups/2/recipients/leave
 
 ###
 POST http://localhost:3002/api/auth/login
@@ -29,6 +29,9 @@ Content-Type: application/json
   "username": "nxhawk",
   "password": "12345678"
 }
+
+###
+DELETE http://localhost:3002/api/groups/2/recipients/1
 
 ###
 POST http://localhost:3002/api/groups/2/recipients
@@ -50,7 +53,7 @@ Content-Type: application/json
   "newOwnerId": 1
 }
 ###
-GET http://localhost:3002/api/groups/2
+GET http://localhost:3002/api/groups
 
 ###
 POST http://localhost:3002/api/groups

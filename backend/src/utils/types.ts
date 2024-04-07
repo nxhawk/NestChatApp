@@ -210,3 +210,14 @@ export type CheckUserGroupParams = {
   id: number;
   userId: number;
 };
+
+export type RemoveGroupRecipientParams = {
+  id: number;
+  removeUserId: number;
+  issuerId: number;
+};
+
+export type RemoveGroupUserResponse = {
+  group: Group;
+  user: User;
+};

@@ -46,4 +46,17 @@ export class GroupRecipientsController {
     // socket here
     return group;
   }
+
+  @Delete(':userId')
+  async removeGroupRecipient(
+    @AuthUser() { id: issuerId }: User,
+    @Param('id', ParseIntPipe) id: number,
+    @Param('userId', ParseIntPipe) removeUserId: number,
+  ) {
+    const params = { issuerId, id, removeUserId };
+    const response =
+      await this.groupRecipientService.removeGroupRecipient(params);
+    // socket here
+    return response.group;
+  }
 }
