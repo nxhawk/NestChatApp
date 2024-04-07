@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { CreateUserParams } from './types';
+import { CreateUserParams, UserCredentialsParams } from './types';
 
 const API_URL = import.meta.env.VITE_BASE_URL;
 
@@ -11,3 +11,6 @@ export const checkUsernameExists = (username: string) =>
 
 export const postRegisterUser = (data: CreateUserParams) =>
   axiosClient.post(`/auth/register`, data, config);
+
+export const postLoginUser = (data: UserCredentialsParams) =>
+  axiosClient.post(`/auth/login`, data, config);

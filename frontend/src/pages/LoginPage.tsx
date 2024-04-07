@@ -1,9 +1,12 @@
-import React from 'react'
+import { LoginForm } from '../components/forms/login';
+import { Page } from '../utils/styles';
 
 const LoginPage = () => {
   return (
-    <div>LoginPage</div>
-  )
-}
+    <Page display="flex" justifyContent="center" alignItems="center">
+      <LoginForm />
+    </Page>
+  );
+};
 
-export default LoginPage
+export default LoginPage;
