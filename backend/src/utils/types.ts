@@ -156,3 +156,9 @@ export type CreateGroupParams = {
 export type FetchGroupsParams = {
   userId: number;
 };
+
+export type TransferOwnerParams = {
+  userId: number;
+  groupId: number;
+  newOwnerId: number;
+};

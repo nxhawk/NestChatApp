@@ -10,8 +10,12 @@ import {
   AccessParams,
   CreateGroupParams,
   FetchGroupsParams,
+  TransferOwnerParams,
 } from 'src/utils/types';
 import { GroupNotFoundException } from '../exceptions/GroupNotFound';
+import { GroupOwnerTransferException } from '../exceptions/GroupOwnerTransfer';
+import { UserNotFoundException } from 'src/users/exceptions/UserNotFound';
+import { NotInGroupException } from '../exceptions/NotInGroup';
 
 @Injectable()
 export class GroupService implements IGroupService {
@@ -23,7 +27,7 @@ export class GroupService implements IGroupService {
     @Inject(Services.IMAGE_UPLOAD_SERVICE)
     private readonly imageStorageService: IImageStorageService,
   ) {}
-  
+
   async createGroup(params: CreateGroupParams) {
     const { creator, title } = params;
     const userPromise = params.users.map((username) =>
@@ -69,5 +73,24 @@ export class GroupService implements IGroupService {
     const group = await this.findGroupById(id);
     if (!group) throw new GroupNotFoundException();
     return group.users.find((user) => user.id === userId);
+  }
+
+  async transferGroupOwner({
+    userId,
+    groupId,
+    newOwnerId,
+  }: TransferOwnerParams): Promise<Group> {
+    const group = await this.findGroupById(groupId);
+    if (!group) throw new GroupNotFoundException();
+    if (group.owner.id !== userId)
+      throw new GroupOwnerTransferException(
+        'Cannot Transfer Owner to yourself',
+      );
+    if (!group.users.find((user) => user.id === newOwnerId))
+      throw new NotInGroupException();
+    const newOwner = await this.userService.findUser({ id: newOwnerId });
+    if (!newOwner) throw new UserNotFoundException();
+    group.owner = newOwner;
+    return this.groupRepository.save(group);
   }
 }
