@@ -13,6 +13,7 @@ import { Services } from 'src/utils/constants';
 import { IConversationsService } from 'src/conversations/conversations';
 import { IGroupService } from 'src/groups/interfaces/group';
 import { IFriendsService } from 'src/friends/friends';
+import { IGatewaySessionManager } from './gateway.session';
 
 @WebSocketGateway({
   cors: {
@@ -26,8 +27,8 @@ export class MessagingGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
   constructor(
-    // @Inject(Services.GATEWAY_SESSION_MANAGER)
-    // readonly sessions: IGatewaySessionManager,
+    @Inject(Services.GATEWAY_SESSION_MANAGER)
+    readonly sessions: IGatewaySessionManager,
     @Inject(Services.CONVERSATIONS)
     private readonly conversationService: IConversationsService,
     @Inject(Services.GROUPS)
@@ -39,13 +40,15 @@ export class MessagingGateway
   @WebSocketServer()
   server: Server;
 
-  handleConnection(socket: AuthenticatedSocket,...args: any[]) {
+  handleConnection(socket: AuthenticatedSocket) {
     console.log('Incoming Connection');
-    console.log(socket.user);
-    //console.log(`${socket.user.username} disconnected.`);
+    this.sessions.setUserSocket(socket.user.id, socket);
+    socket.emit('connected', {});
   }
 
   handleDisconnect(socket: AuthenticatedSocket) {
     console.log('handleDisconnect');
+    console.log(`${socket.user.username} disconnected.`);
+    this.sessions.removeUserSocket(socket.user.id);
   }
 }
