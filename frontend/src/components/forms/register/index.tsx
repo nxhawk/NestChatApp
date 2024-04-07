@@ -5,7 +5,9 @@ import { CreateUserParams } from '../../../utils/types';
 import { NameField } from './NameField';
 import { PasswordField } from './PasswordField';
 import { Button } from '../../../utils/styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { postRegisterUser } from '../../../utils/api';
 
 export const RegisterForm = () => {
   const {
@@ -14,8 +16,17 @@ export const RegisterForm = () => {
     formState: { errors },
   } = useForm<CreateUserParams>({ reValidateMode: 'onBlur' });
   
+  const navigate = useNavigate();
   const onSubmit = async (data: CreateUserParams) => {
-    console.log(data);
+    try {
+      await postRegisterUser(data);
+      navigate('/login');
+      toast.clearWaitingQueue();
+      toast.success('Account created!');
+    } catch (error) {
+      toast.clearWaitingQueue();
+      toast.error('Error creating user');
+    }
   }
 
   const formFieldProps = { errors, register };
