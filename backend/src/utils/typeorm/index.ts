@@ -7,6 +7,7 @@ import { GroupMessageAttachment } from './entities/GroupMessageAttachment';
 import { Message } from './entities/Message';
 import { MessageAttachment } from './entities/MessageAttachment';
 import { Profile } from './entities/Profile';
+import { Session } from './entities/Session';
 import { User } from './entities/User';
 import { UserPresence } from './entities/UserPresence';
 
@@ -22,6 +23,7 @@ const entities = [
   Group,
   GroupMessage,
   GroupMessageAttachment,
+  Session,
 ];
 
 export default entities;
@@ -37,4 +39,5 @@ export {
   Group,
   GroupMessage,
   GroupMessageAttachment,
+  Session,
 };
