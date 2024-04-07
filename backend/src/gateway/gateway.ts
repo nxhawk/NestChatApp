@@ -39,18 +39,13 @@ export class MessagingGateway
   @WebSocketServer()
   server: Server;
 
-  handleDisconnect(socket: AuthenticatedSocket) {
-    console.log('handleDisconnect');
-    console.log(socket);
-  }
-
   handleConnection(socket: AuthenticatedSocket,...args: any[]) {
     console.log('Incoming Connection');
+    console.log(socket.user);
     //console.log(`${socket.user.username} disconnected.`);
   }
 
-  @SubscribeMessage('getOnlineGroupUsers')
-  async handleGetOnlineGroupUsers(@MessageBody() data: any,) {
-    console.log(data);
+  handleDisconnect(socket: AuthenticatedSocket) {
+    console.log('handleDisconnect');
   }
 }
