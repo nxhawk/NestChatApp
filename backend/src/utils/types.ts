@@ -175,3 +175,16 @@ export type CreateGroupMessageParams = {
   content: string;
   groupId: number;
 };
+
+export type DeleteGroupMessageParams = {
+  userId: number;
+  groupId: number;
+  messageId: number;
+};
+
+export type EditGroupMessageParams = {
+  groupId: number;
+  messageId: number;
+  userId: number;
+  content: string;
+};
