@@ -168,3 +168,10 @@ export type UpdateGroupDetailsParams = {
   title?: string;
   avatar?: Attachment;
 };
+
+export type CreateGroupMessageParams = {
+  author: User;
+  attachments?: Attachment[];
+  content: string;
+  groupId: number;
+};

@@ -30,6 +30,10 @@ export class GroupService implements IGroupService {
     private readonly imageStorageService: IImageStorageService,
   ) {}
 
+  saveGroup(group: Group): Promise<Group> {
+    return this.groupRepository.save(group);
+  }
+
   async createGroup(params: CreateGroupParams) {
     const { creator, title } = params;
     const userPromise = params.users.map((username) =>

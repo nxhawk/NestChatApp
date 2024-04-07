@@ -9,6 +9,8 @@ import { Services } from 'src/utils/constants';
 import { GroupService } from './services/group.service';
 import { isAuthorized } from 'src/utils/helpers';
 import { GroupMiddleware } from './middlewares/group.middleware';
+import { GroupMessageController } from './controllers/group-messages.controller';
+import { GroupMessageService } from './services/group-messages.service';
 
 @Module({
   imports: [
@@ -17,11 +19,15 @@ import { GroupMiddleware } from './middlewares/group.middleware';
     MessageAttachmentsModule,
     ImageStorageModule,
   ],
-  controllers: [GroupController],
+  controllers: [GroupController, GroupMessageController],
   providers: [
     {
       provide: Services.GROUPS,
       useClass: GroupService,
+    },
+    {
+      provide: Services.GROUP_MESSAGES,
+      useClass: GroupMessageService,
     },
   ],
   exports: [
