@@ -2,6 +2,7 @@ import {
   Conversation,
   Friend,
   FriendRequest,
+  Group,
   Message,
   MessageAttachment,
   User,
@@ -187,4 +188,15 @@ export type EditGroupMessageParams = {
   messageId: number;
   userId: number;
   content: string;
+};
+
+export type AddGroupRecipientParams = {
+  id: number;
+  username: string;
+  userId: number;
+};
+
+export type AddGroupUserResponse = {
+  group: Group;
+  user: User;
 };

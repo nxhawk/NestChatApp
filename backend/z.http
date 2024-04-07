@@ -28,6 +28,9 @@ Content-Type: application/json
 }
 
 ###
+DELETE http://localhost:3002/api/groups/1/messages/1
+
+###
 GET http://localhost:3002/api/groups/1/messages
 ###
 PATCH http://localhost:3002/api/groups/1/owner
